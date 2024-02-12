@@ -6,6 +6,7 @@ import Footer from "../../Components/Footer/Footer"
 import {userAds } from '../../config/firebase';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { addData } from '../../config/firebase';
+import { Try } from '@mui/icons-material';
 // import Map, { Marker } from 'react-map-gl';
 
 export default function Post() {
@@ -28,18 +29,53 @@ export default function Post() {
             setlatitude(latitude)
             setlongitude(longitude)
         })
+        
     }, [])
 useEffect(()=>{
   // userdata()
   // getuser()
+  getAddress()
   // AdsInfo ()
 },[])
+function getAddress (latitude, longitude) {
+    try {
+      return new Promise(function (resolve, reject) {
+          var request = new XMLHttpRequest();
+          var method = 'GET';
+          var url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=24.8524824,67.0852996&sensor=true';
+          var async = true;
+          request.open(method, url, async);
+          request.onreadystatechange = function () {
+              if (request.readyState == 4) {
+                  if (request.status == 200) {
+                      var data = JSON.parse(request.responseText);
+                      var address = data.results[0];
+                      console.log(address)
+                      resolve(address);
+                  }
+                  else {
+                      reject(request.status);
+                  }
+              }
+          };
+          request.send();
+      });
+  }
+      catch (error) {
+        console.log('map ka error --->',error.message)
+    }
+    getAddress(24.8524824, 67.0852996).then(console.log).catch(console.error);
+};
 const [userEmail,setUserEmail]=useState()
 const [title,setTitle]= useState('')
 const [brand,setBrand]= useState('')
 const [neww,setCondition]= useState('')
 const [price,setPrice]= useState('')
 const [url,setImage]= useState('')
+// const [Image1,setImage1]= useState('')
+// const [Image1,setImage2]= useState('')
+// const [Image1,setImage3]= useState('')
+
 const [description,setDesciption]= useState('')
   function getuser() {
     const auth = getAuth();
@@ -54,7 +90,9 @@ const [description,setDesciption]= useState('')
           price,
           description,
           url ,
-          userEmail
+          userEmail,
+
+          // location:latitude,longitude
          }
         // console.log( Ads.url.name) 
        const image =  await userAds(Ads)
@@ -150,15 +188,28 @@ const [description,setDesciption]= useState('')
   </div>
   <div className="container">
     <p>
-      <b>UPLOAD SOME PICTURES OF PROCDUCT</b>
+      <b>UPLOAD THUMBNAIL OF PROCDUCT</b>
     </p>
     <input type="file" name="Image" id="file " 
     onChange={(e) => setImage(e.target.files[0])}
      />
   </div>
+  {/* <div className="container">
+    <p>
+      <b>UPLOAD SOME PICTURES OF PROCDUCT</b>
+    </p>
+    <input type="file" name="Image" id="file " 
+    onChange={(e) => setImage1(e.target.files[1])}
+     />
+     <input type="file" name="Image" id="file " 
+    onChange={(e) => setImage2(e.target.files[2])}
+     /><input type="file" name="Image" id="file " 
+     onChange={(e) => setImage3(e.target.files[3])}
+      />
+  </div> */}
   <div>
     
-  <iframe src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3620.1438062765446!2d${latitude}!3d${latitude}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33c01e40a571b%3A0xf9e6a42d8b197f90!2sManzoor%20Colony%20Fire%20Station!5e0!3m2!1sen!2s!4v1707599373746!5m2!1sen!2s`} width="600" height="450" style={{border:0}} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  <iframe src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3620.1438062765446!2d${latitude}!3d${latitude}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33c01e40a571b%3A0xf9e6a42d8b197f90!2sManzoor%20Colony%20Fire%20Station!5e0!3m2!1sen!2s!4v1707599373746!5m2!1sen!2s`} width="500" height="350" style={{border:0,marginLeft:62}} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
   </div>
 {/*  
   {location && <Map

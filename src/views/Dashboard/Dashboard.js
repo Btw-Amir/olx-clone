@@ -17,12 +17,16 @@ export default function Dashboard() {
     <div>
       <Navbar/>
       <Slider/>
+      <div className='parent-card'>
+
       <div className='card-cover'>
 
         {ads.map(function (item, index) {
           return <Products data={ads} key={index} sno={index} />
         })}
       </div>
+      </div>
+
       <Footer/>
     </div>
   )

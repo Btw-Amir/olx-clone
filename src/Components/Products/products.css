@@ -24,7 +24,7 @@
 }
 .card-cover{
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     margin: auto;
     flex-wrap: wrap;
     width: 100%;
@@ -69,4 +69,8 @@ margin-bottom: 0px;
 }
 p{
     margin-bottom: 10px;
+}
+.parent-card{
+    width: 1248px;
+    margin: auto
 }
