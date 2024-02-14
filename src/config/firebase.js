@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs, doc, getDoc, setDoc,addDoc } from "firebase/firestore";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const firebaseConfig = {
@@ -16,12 +16,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
 const storage = getStorage();
-// var userID
-
-
-
-
-
 
 export async function signIn(userdata) {
   const { email, password } = userdata
@@ -61,49 +55,44 @@ export async function getpro(id) {
   console.log('this is data -->', data)
   return data
 }
-// var uid?
-// getuser()
-// export async function getuser() {
-//   await onAuthStateChanged(auth, (user) => {
+export async function userAds(Ads) {
+  try {
+    const { url: { name } } = Ads
+    const storageRef = ref(storage, 'Images/' + name);
+   await uploadBytes(storageRef, Ads.url)
+    const url = await getDownloadURL(storageRef)
+    return url
 
-//     if (user) {
-//       uid = user;
-//       console.log(uid)
-//       // console.log(uid.email)
-
-//       return uid.email
-//     } else {
-//       return 'Login'
-//     }
-//   }
-//   );
-//   // return uid.email
-// }
-export async function userAds(Ads){
-  try{
-    const{url:{name}}= Ads
-    const storageRef =  ref(storage, 'Images/'+ name);
-  const upload=  await  uploadBytes(storageRef, Ads.url)
-  console.log(upload)
-      console.log('Uploaded a blob or file!');
-  const url= await getDownloadURL(storageRef)
-  console.log(storageRef)
-  return url
-
+  }
+  catch (e) {
+    alert(e.message)
+  }
 }
-catch(e){
-  alert(e.message)
+// multi images
+export async function multiImages(Ads){
+  debugger
+  const all =[]
+  const {multiImage} = Ads
+  for( let i =0; i<multiImage.length; i++){
+    const storageRef = ref(storage,`/mutlipleImages/${multiImage[i].name}`);
+    await uploadBytes(storageRef, multiImage[i])
+    .then(() =>{
+      console.log('success')
+    }).catch(()=>{
+      console.log('failed')
+    })
+    const url = await getDownloadURL(storageRef)
+   all.push(url)
+    
+  }
+return
 }
-}
-export async function addData(Ads){
-  try{
+export async function addData(Ads) {
+  try {
     const docRef = await addDoc(collection(db, "Ads"),Ads );
     console.log("Document written with ID: ", docRef.id);
     console.log('THis is the add from fb',Ads)
-
-  }catch(e){
+  } catch (e) {
     console.log(e.message)
   }
 }
-// console.log('imageURL-->',url)
-// Ads.Image = url
