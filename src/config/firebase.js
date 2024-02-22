@@ -70,7 +70,7 @@ export async function userAds(Ads) {
 }
 // multi images
 export async function multiImages(Ads){
-  debugger
+  // debugger
   const all =[]
   const {multiImage} = Ads
   for( let i =0; i<multiImage.length; i++){
@@ -85,7 +85,7 @@ export async function multiImages(Ads){
    all.push(url)
     
   }
-return
+return all
 }
 export async function addData(Ads) {
   try {

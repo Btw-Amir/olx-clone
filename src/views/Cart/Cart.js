@@ -5,25 +5,21 @@ import { useSelector } from 'react-redux'
 import '../../Components/Products/products.css'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { useNavigate } from 'react-router-dom';
 export default function Cart() {
   const count = useSelector((state) => state.value)
   const [toggle, setToggle] = useState(true)
-  const navigate = useNavigate()
-  // let a = []
-  useEffect(() => {
-    // a.push(count)
-    console.log(count)
-    setcart(count)
-    // ss.push('aa')
-  }, [count])
-  
   const [cart, setcart] = useState([])
-  console.log('new array',cart)
+
+  useEffect(() => {
+
+    setcart(count)
+
+  }, [count])
 
   function red() {
     setToggle(!toggle)
   }
+
   return (
     <div>
       <Navbar />
@@ -34,8 +30,9 @@ export default function Cart() {
             <div className='detail-box'>
                 <div className='price'>
                     <p><b>RS {items.price}</b></p>
-                    {!toggle ? <FavoriteIcon color='error' /> :
-                        <FavoriteBorderIcon onClick={red} />
+                    {!toggle ? <FavoriteBorderIcon onClick={red} />:
+                    <FavoriteIcon color='error' /> 
+                        
                     }
                 </div>
                 <div className='des'>
